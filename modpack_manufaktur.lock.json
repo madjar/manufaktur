@@ -7,21 +7,21 @@
     },
     {
         "dependencies": null,
-        "name": "FNEI",
-        "downloadUrl": "/download/FNEI/5aa2d4b88628b100098e8b22",
-        "filename": "FNEI_0.1.5.zip"
-    },
-    {
-        "dependencies": null,
         "name": "SpaceMod",
-        "downloadUrl": "/download/SpaceMod/5a5f1ae6adcc441024d74773",
-        "filename": "SpaceMod_0.3.4.zip"
+        "downloadUrl": "/download/SpaceMod/5b2748ed2d5e3b000a85c082",
+        "filename": "SpaceMod_0.3.5.zip"
     },
     {
         "dependencies": null,
         "name": "Train_Ore_Color-016",
         "downloadUrl": "/download/Train_Ore_Color-016/5a5f1ae6adcc441024d74859",
         "filename": "Train_Ore_Color-016_1.2.0.zip"
+    },
+    {
+        "dependencies": null,
+        "name": "always-show-recipe-products",
+        "downloadUrl": "/download/always-show-recipe-products/5a5f1ae6adcc441024d73671",
+        "filename": "always-show-recipe-products_0.1.2.zip"
     },
     {
         "dependencies": null,
@@ -32,20 +32,20 @@
     {
         "dependencies": null,
         "name": "angelspetrochem",
-        "downloadUrl": "/download/angelspetrochem/5ac29b8bbaa458000b62da47",
-        "filename": "angelspetrochem_0.7.8.zip"
+        "downloadUrl": "/download/angelspetrochem/5b1d634f89846b000ab14f2a",
+        "filename": "angelspetrochem_0.7.9.zip"
     },
     {
         "dependencies": null,
         "name": "angelsrefining",
-        "downloadUrl": "/download/angelsrefining/5aedf712f9cf08000951007a",
-        "filename": "angelsrefining_0.9.11.zip"
+        "downloadUrl": "/download/angelsrefining/5b1c643795ee70000ae912c6",
+        "filename": "angelsrefining_0.9.12.zip"
     },
     {
         "dependencies": null,
         "name": "angelssmelting",
-        "downloadUrl": "/download/angelssmelting/5a7753fbddb52b00094609fd",
-        "filename": "angelssmelting_0.4.3.zip"
+        "downloadUrl": "/download/angelssmelting/5b1d649c89846b000914bdad",
+        "filename": "angelssmelting_0.4.4.zip"
     },
     {
         "dependencies": null,
@@ -86,14 +86,14 @@
     {
         "dependencies": null,
         "name": "boblibrary",
-        "downloadUrl": "/download/boblibrary/5ab706e7febabf000abfd6d7",
-        "filename": "boblibrary_0.16.5.zip"
+        "downloadUrl": "/download/boblibrary/5b1d4a1189846b000b5ac75a",
+        "filename": "boblibrary_0.16.6.zip"
     },
     {
         "dependencies": null,
         "name": "boblogistics",
-        "downloadUrl": "/download/boblogistics/5ace44b24e4a8a000a0436c6",
-        "filename": "boblogistics_0.16.22.zip"
+        "downloadUrl": "/download/boblogistics/5b1d4a221efd270009987212",
+        "filename": "boblogistics_0.16.23.zip"
     },
     {
         "dependencies": null,
@@ -116,14 +116,14 @@
     {
         "dependencies": null,
         "name": "bobplates",
-        "downloadUrl": "/download/bobplates/5abd8ba0a796800009288bd8",
-        "filename": "bobplates_0.16.3.zip"
+        "downloadUrl": "/download/bobplates/5b1d4a2a89846b000b5aca9a",
+        "filename": "bobplates_0.16.4.zip"
     },
     {
         "dependencies": null,
         "name": "bobpower",
-        "downloadUrl": "/download/bobpower/5ac2d06abc47010009f7d1a9",
-        "filename": "bobpower_0.16.4.zip"
+        "downloadUrl": "/download/bobpower/5afa07c5e2ecf4000bcfa34f",
+        "filename": "bobpower_0.16.5.zip"
     },
     {
         "dependencies": null,
@@ -134,8 +134,8 @@
     {
         "dependencies": null,
         "name": "bobtech",
-        "downloadUrl": "/download/bobtech/5ac29e0cbaa4580009226c54",
-        "filename": "bobtech_0.16.5.zip"
+        "downloadUrl": "/download/bobtech/5b1d4a3889846b000aaf817b",
+        "filename": "bobtech_0.16.6.zip"
     },
     {
         "dependencies": null,
@@ -146,19 +146,31 @@
     {
         "dependencies": null,
         "name": "bobwarfare",
-        "downloadUrl": "/download/bobwarfare/5abd8bc36e23ee000d3bd241",
-        "filename": "bobwarfare_0.16.6.zip"
+        "downloadUrl": "/download/bobwarfare/5b1d4a411efd27000a75ebe6",
+        "filename": "bobwarfare_0.16.7.zip"
+    },
+    {
+        "dependencies": null,
+        "name": "helmod",
+        "downloadUrl": "/download/helmod/5b14257e180f1a000b73af82",
+        "filename": "helmod_0.7.11.zip"
     },
     {
         "dependencies": null,
         "name": "rso-mod",
-        "downloadUrl": "/download/rso-mod/5af0976627429f000aa7bf04",
-        "filename": "rso-mod_3.6.4.zip"
+        "downloadUrl": "/download/rso-mod/5b13bd9f9d403c00093bc4b4",
+        "filename": "rso-mod_3.7.3.zip"
     },
     {
         "dependencies": null,
         "name": "upgrade-planner",
         "downloadUrl": "/download/upgrade-planner/5abea61d6e23ee000ac9f5e4",
         "filename": "upgrade-planner_1.5.3.zip"
+    },
+    {
+        "dependencies": null,
+        "name": "what-is-it-really-used-for",
+        "downloadUrl": "/download/what-is-it-really-used-for/5ab689507a30a1000babeeb6",
+        "filename": "what-is-it-really-used-for_1.3.4.zip"
     }
 ]

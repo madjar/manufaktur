@@ -24,6 +24,8 @@ SpaceMod
 rso-mod
 Bottleneck
 upgrade-planner
-FNEI
 Train_Ore_Color-016
 autofill
+what-is-it-really-used-for
+helmod
+always-show-recipe-products
