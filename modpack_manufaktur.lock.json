@@ -1,0 +1,164 @@
+[
+    {
+        "dependencies": null,
+        "name": "Bottleneck",
+        "downloadUrl": "/download/Bottleneck/5a5f1ae6adcc441024d72df5",
+        "filename": "Bottleneck_0.9.1.zip"
+    },
+    {
+        "dependencies": null,
+        "name": "FNEI",
+        "downloadUrl": "/download/FNEI/5aa2d4b88628b100098e8b22",
+        "filename": "FNEI_0.1.5.zip"
+    },
+    {
+        "dependencies": null,
+        "name": "SpaceMod",
+        "downloadUrl": "/download/SpaceMod/5a5f1ae6adcc441024d74773",
+        "filename": "SpaceMod_0.3.4.zip"
+    },
+    {
+        "dependencies": null,
+        "name": "Train_Ore_Color-016",
+        "downloadUrl": "/download/Train_Ore_Color-016/5a5f1ae6adcc441024d74859",
+        "filename": "Train_Ore_Color-016_1.2.0.zip"
+    },
+    {
+        "dependencies": null,
+        "name": "angelsinfiniteores",
+        "downloadUrl": "/download/angelsinfiniteores/5a5f1ae6adcc441024d741f1",
+        "filename": "angelsinfiniteores_0.7.3.zip"
+    },
+    {
+        "dependencies": null,
+        "name": "angelspetrochem",
+        "downloadUrl": "/download/angelspetrochem/5ac29b8bbaa458000b62da47",
+        "filename": "angelspetrochem_0.7.8.zip"
+    },
+    {
+        "dependencies": null,
+        "name": "angelsrefining",
+        "downloadUrl": "/download/angelsrefining/5aedf712f9cf08000951007a",
+        "filename": "angelsrefining_0.9.11.zip"
+    },
+    {
+        "dependencies": null,
+        "name": "angelssmelting",
+        "downloadUrl": "/download/angelssmelting/5a7753fbddb52b00094609fd",
+        "filename": "angelssmelting_0.4.3.zip"
+    },
+    {
+        "dependencies": null,
+        "name": "autofill",
+        "downloadUrl": "/download/autofill/5a5f1ae6adcc441024d7284b",
+        "filename": "autofill_2.0.1.zip"
+    },
+    {
+        "dependencies": null,
+        "name": "bobassembly",
+        "downloadUrl": "/download/bobassembly/5a8c9205e02f21000b65eda7",
+        "filename": "bobassembly_0.16.1.zip"
+    },
+    {
+        "dependencies": null,
+        "name": "bobelectronics",
+        "downloadUrl": "/download/bobelectronics/5a5f1ae6adcc441024d74762",
+        "filename": "bobelectronics_0.16.0.zip"
+    },
+    {
+        "dependencies": null,
+        "name": "bobenemies",
+        "downloadUrl": "/download/bobenemies/5a5f1ae6adcc441024d74771",
+        "filename": "bobenemies_0.16.0.zip"
+    },
+    {
+        "dependencies": null,
+        "name": "bobgreenhouse",
+        "downloadUrl": "/download/bobgreenhouse/5a5f1ae6adcc441024d74778",
+        "filename": "bobgreenhouse_0.16.0.zip"
+    },
+    {
+        "dependencies": null,
+        "name": "bobinserters",
+        "downloadUrl": "/download/bobinserters/5acea6a03d1a6f0009a231f8",
+        "filename": "bobinserters_0.16.8.zip"
+    },
+    {
+        "dependencies": null,
+        "name": "boblibrary",
+        "downloadUrl": "/download/boblibrary/5ab706e7febabf000abfd6d7",
+        "filename": "boblibrary_0.16.5.zip"
+    },
+    {
+        "dependencies": null,
+        "name": "boblogistics",
+        "downloadUrl": "/download/boblogistics/5ace44b24e4a8a000a0436c6",
+        "filename": "boblogistics_0.16.22.zip"
+    },
+    {
+        "dependencies": null,
+        "name": "bobmining",
+        "downloadUrl": "/download/bobmining/5a5f1ae6adcc441024d74799",
+        "filename": "bobmining_0.16.0.zip"
+    },
+    {
+        "dependencies": null,
+        "name": "bobmodules",
+        "downloadUrl": "/download/bobmodules/5a5f1ae6adcc441024d747a7",
+        "filename": "bobmodules_0.16.0.zip"
+    },
+    {
+        "dependencies": null,
+        "name": "bobores",
+        "downloadUrl": "/download/bobores/5a61427b814eaa000918e02d",
+        "filename": "bobores_0.16.2.zip"
+    },
+    {
+        "dependencies": null,
+        "name": "bobplates",
+        "downloadUrl": "/download/bobplates/5abd8ba0a796800009288bd8",
+        "filename": "bobplates_0.16.3.zip"
+    },
+    {
+        "dependencies": null,
+        "name": "bobpower",
+        "downloadUrl": "/download/bobpower/5ac2d06abc47010009f7d1a9",
+        "filename": "bobpower_0.16.4.zip"
+    },
+    {
+        "dependencies": null,
+        "name": "bobrevamp",
+        "downloadUrl": "/download/bobrevamp/5aa7164284f13e000910f6b0",
+        "filename": "bobrevamp_0.16.2.zip"
+    },
+    {
+        "dependencies": null,
+        "name": "bobtech",
+        "downloadUrl": "/download/bobtech/5ac29e0cbaa4580009226c54",
+        "filename": "bobtech_0.16.5.zip"
+    },
+    {
+        "dependencies": null,
+        "name": "bobvehicleequipment",
+        "downloadUrl": "/download/bobvehicleequipment/5a7df17cfbdfd0000a5e0c4e",
+        "filename": "bobvehicleequipment_0.16.2.zip"
+    },
+    {
+        "dependencies": null,
+        "name": "bobwarfare",
+        "downloadUrl": "/download/bobwarfare/5abd8bc36e23ee000d3bd241",
+        "filename": "bobwarfare_0.16.6.zip"
+    },
+    {
+        "dependencies": null,
+        "name": "rso-mod",
+        "downloadUrl": "/download/rso-mod/5af0976627429f000aa7bf04",
+        "filename": "rso-mod_3.6.4.zip"
+    },
+    {
+        "dependencies": null,
+        "name": "upgrade-planner",
+        "downloadUrl": "/download/upgrade-planner/5abea61d6e23ee000ac9f5e4",
+        "filename": "upgrade-planner_1.5.3.zip"
+    }
+]
