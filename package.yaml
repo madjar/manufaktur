@@ -27,6 +27,7 @@ dependencies:
 - aeson
 - aeson-pretty
 - data-fix
+- microlens-ghc
 
 ghc-options:
 - -Wall

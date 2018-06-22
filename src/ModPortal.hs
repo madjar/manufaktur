@@ -19,6 +19,7 @@ import qualified RIO.Map.Unchecked as Map
 import Data.Aeson
 import Data.Aeson.Types (Parser, parseEither)
 import Network.HTTP.Simple
+import Network.HTTP.Conduit (parseUrlThrow)
 
 
 getMods :: RIO App (Map Text (Mod Text))
@@ -50,10 +51,12 @@ modsResponseParser root = do
 fetchMod :: Mod a -> RIO App FilePath
 fetchMod mod = do
   cacheDir <- asks appCacheDir
+  token <- asks appFactorioToken
   let modFile = cacheDir </> filename mod
   whenM (not <$> doesFileExist modFile) $ do
     logInfo ("Downloading " <> displayShow (filename mod))
+    req <- parseUrlThrow "https://mods.factorio.com"
     -- XXX file in memory
-    response <- httpBS (setRequestPath (encodeUtf8 (downloadUrl mod)) "https://mods.factorio.com?username=madjar&token=dd2965ef6a27cbe0fd6e0a31adea7e")
+    response <- httpBS $ setRequestPath (encodeUtf8 (downloadUrl mod)) $ setRequestQueryString [("token", Just token)] $ req
     writeFileBinary modFile (getResponseBody response)
   return modFile
