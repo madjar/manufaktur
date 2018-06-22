@@ -22,6 +22,7 @@ data App = App
   , appProcessContext :: !ProcessContext
   , appOptions :: !Options
   , appCacheDir :: !FilePath
+  , appFactorioUsername :: !ByteString
   , appFactorioToken :: !ByteString
   -- Add other app-specific configuration information here
   }

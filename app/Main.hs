@@ -7,6 +7,7 @@ import Import
 import Run
 import RIO.Directory
 import RIO.Process
+import qualified RIO.Text as Text
 import Options.Applicative.Simple
 import Lens.Micro.GHC
 import qualified Paths_manufaktur
@@ -31,14 +32,17 @@ main = do
   createDirectoryIfMissing False cacheDir
   lo <- logOptionsHandle stderr (optionsVerbose options)
   pc <- mkDefaultProcessContext
-  token <- maybe (fail "FACTORIO_TOKEN environment variable required") return
-    $ pc ^? envVarsL . ix "FACTORIO_TOKEN" . to encodeUtf8
+  let envVar var = maybe (fail (Text.unpack var <> " environment variable required")) return
+                   $ pc ^? envVarsL . ix var . to encodeUtf8
+  username <- envVar "FACTORIO_USERNAME"
+  token <- envVar "FACTORIO_TOKEN"
   withLogFunc lo $ \lf ->
     let app = App
           { appLogFunc = lf
           , appProcessContext = pc
           , appOptions = options
           , appCacheDir = cacheDir
+          , appFactorioUsername = username
           , appFactorioToken = token
           }
      in runRIO app run

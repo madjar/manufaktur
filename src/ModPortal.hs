@@ -52,6 +52,7 @@ fetchMod :: Mod a -> RIO App FilePath
 fetchMod Mod {filename, downloadUrl} = do
   cacheDir <- asks appCacheDir
   token <- asks appFactorioToken
+  username <- asks appFactorioUsername
   let modFile = cacheDir </> filename
   whenM (not <$> doesFileExist modFile) $ do
     logInfo ("Downloading " <> displayShow (filename))
@@ -59,7 +60,7 @@ fetchMod Mod {filename, downloadUrl} = do
     -- XXX file in memory
     response <- httpBS
       $ setRequestPath (encodeUtf8 downloadUrl)
-      $ setRequestQueryString [("token", Just token)]
+      $ setRequestQueryString [("username", Just username), ("token", Just token)]
       $ req
     writeFileBinary modFile (getResponseBody response)
   return modFile
