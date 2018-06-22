@@ -20,7 +20,7 @@ run = do
   modList <- asks (optionsModList . appOptions)
   let lockFile = modList -<.> "lock.json"
   lockFileExists <- doesFileExist lockFile
-  dependencies <- if lockFileExists
+  modpackContent <- if lockFileExists
     then do logInfo (displayShow lockFile <> " exists, reading mods versions from it")
             readJSON lockFile
     else do logInfo (displayShow lockFile <> " does not exist, creating it")
@@ -34,15 +34,15 @@ run = do
             logDebug ("Mod list: " <> displayShow modpackDef)
 
             mods <- getMods
-            mod <- resolveDeps mods modpackDef
-            let dependencies = toList (foldMap flattenDeps mod)
+            mod_ <- resolveDeps mods modpackDef
+            let modpackContent= toList (foldMap flattenDeps mod_)
 
-            logInfo ("All dependencies: " <> displayShow (map name dependencies))
+            logInfo ("All modpackContent: " <> displayShow (map name modpackContent))
 
-            writeFileBinary lockFile (BL.toStrict $ encodePretty dependencies)
-            return dependencies
+            writeFileBinary lockFile (BL.toStrict $ encodePretty modpackContent)
+            return modpackContent
 
-  writeModPack (modList -<.> "zip") dependencies
+  writeModPack (modList -<.> "zip") modpackContent
 
 writeModPack :: FilePath -> [Mod a] -> RIO App ()
 writeModPack output mods = do

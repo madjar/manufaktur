@@ -15,19 +15,20 @@ import qualified RIO.Text as Text
 import RIO.FilePath
 
 import Data.Aeson
-import Data.Aeson.Types (Parser, parseEither)
+import Data.Aeson.Types (parseEither)
 import Data.Fix
 import Codec.Archive.Zip
 
 -- Forgot why
+blackList :: [Text]
 blackList = ["UberTweaks"]
 
 
 lookupDependencies :: Mod a -> RIO App (Mod Text)
-lookupDependencies mod = do
-  modFile <- fetchMod mod
+lookupDependencies mod_ = do
+  modFile <- fetchMod mod_
   infoEntry <- withArchive modFile $ do
-    s <- mkEntrySelector (dropExtension (filename mod) </> "info.json")
+    s <- mkEntrySelector (dropExtension (filename mod_) </> "info.json")
     getEntry s
 
   let allDeps = either error id $ parseEither (\o -> o .:? "dependencies" .!= []) =<< eitherDecodeStrict infoEntry
@@ -35,9 +36,9 @@ lookupDependencies mod = do
       cleanDeps = filter (/= "base") . filter (`notElem` blackList) . map (Text.strip . Text.takeWhile (`notElem` ['<', '>', '=']))
       sortedDeps = (cleanDeps *** cleanDeps) allSortedDeps
 
-  logDebug ("Dependencies for " <> displayShow (name mod) <> " are " <> displayShow sortedDeps)
+  logDebug ("Dependencies for " <> displayShow (name mod_) <> " are " <> displayShow sortedDeps)
 
-  return (mod { dependencies = Just sortedDeps })
+  return (mod_ { dependencies = Just sortedDeps })
 
 resolveDeps :: Map Text (Mod Text) -> [Text] -> RIO App [Fix Mod]
 resolveDeps mods names = do
@@ -46,8 +47,9 @@ resolveDeps mods names = do
 
 flattenDeps :: Fix Mod -> Set (Mod ())
 flattenDeps = Set.fromList . cata go
-  where go mod = let Just (mandatory, _) = dependencies mod in mod {dependencies = Nothing} : concat mandatory
+  where go mod_ = let Just (mandatory, _) = dependencies mod_ in mod_ {dependencies = Nothing} : concat mandatory
 
+caching :: (Ord k, MonadIO m) => (k -> m a) -> m (k -> m a)
 caching f = do
   cacheRef <- newIORef Map.empty
   return $ \n -> do

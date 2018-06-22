@@ -1,3 +1,5 @@
+{-# LANGUAGE NamedFieldPuns #-}
+{-# LANGUAGE RecordWildCards #-}
 {-# LANGUAGE NoImplicitPrelude #-}
 {-# LANGUAGE OverloadedStrings #-}
 module ModPortal
@@ -11,8 +13,6 @@ import Util
 import RIO.Directory
 import RIO.FilePath
 import qualified RIO.ByteString.Lazy as BL
-import qualified RIO.Map as Map
-import qualified RIO.Map.Partial as Map
 import qualified RIO.Map.Unchecked as Map
 
 
@@ -49,14 +49,17 @@ modsResponseParser root = do
 
 
 fetchMod :: Mod a -> RIO App FilePath
-fetchMod mod = do
+fetchMod Mod {filename, downloadUrl} = do
   cacheDir <- asks appCacheDir
   token <- asks appFactorioToken
-  let modFile = cacheDir </> filename mod
+  let modFile = cacheDir </> filename
   whenM (not <$> doesFileExist modFile) $ do
-    logInfo ("Downloading " <> displayShow (filename mod))
+    logInfo ("Downloading " <> displayShow (filename))
     req <- parseUrlThrow "https://mods.factorio.com"
     -- XXX file in memory
-    response <- httpBS $ setRequestPath (encodeUtf8 (downloadUrl mod)) $ setRequestQueryString [("token", Just token)] $ req
+    response <- httpBS
+      $ setRequestPath (encodeUtf8 downloadUrl)
+      $ setRequestQueryString [("token", Just token)]
+      $ req
     writeFileBinary modFile (getResponseBody response)
   return modFile
