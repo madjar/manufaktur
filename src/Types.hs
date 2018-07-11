@@ -1,14 +1,14 @@
 {-# LANGUAGE NoImplicitPrelude #-}
-{-# LANGUAGE DeriveGeneric #-}
 {-# LANGUAGE DeriveTraversable #-}
 {-# LANGUAGE DeriveFunctor #-}
-{-# LANGUAGE DeriveAnyClass #-}
+{-# LANGUAGE TemplateHaskell #-}
 module Types where
 
 import RIO
 import RIO.Process
 
-import Data.Aeson (FromJSON, ToJSON)
+import Data.Aeson (camelTo2)
+import Data.Aeson.TH (fieldLabelModifier, deriveJSON, defaultOptions)
 
 
 -- | Command line arguments
@@ -34,8 +34,10 @@ instance HasProcessContext App where
 
 
 data Mod r = Mod
-  { name :: Text
-  , filename :: FilePath
-  , downloadUrl :: Text
-  , dependencies :: Maybe ([r], [r])
-  } deriving (Show, Generic, FromJSON, ToJSON, Functor, Foldable, Traversable, Eq, Ord)
+  { modName :: Text
+  , modFilename :: FilePath
+  , modDownloadUrl :: Text
+  , modDependencies :: Maybe ([r], [r])
+  } deriving (Show, Functor, Foldable, Traversable, Eq, Ord)
+
+deriveJSON defaultOptions { fieldLabelModifier = camelTo2 '_' . drop 3} '' Mod

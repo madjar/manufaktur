@@ -35,7 +35,7 @@ getMods = do
       let mods = either error id $ parseEither modsResponseParser (getResponseBody response)
       writeFileBinary modsFile (BL.toStrict (encode mods))
       return mods
-  return . Map.fromDistinctAscList . map (name &&& id ) $ mods
+  return . Map.fromDistinctAscList . map (modName &&& id ) $ mods
 
 modsResponseParser :: Object -> Parser [Mod Text]
 modsResponseParser root = do
@@ -45,21 +45,21 @@ modsResponseParser root = do
     latest_release <- obj .: "latest_release"
     file_name <- latest_release .: "file_name"
     download_url <- latest_release .: "download_url"
-    return Mod { name = name, filename = file_name, downloadUrl = download_url, dependencies = Nothing}
+    return Mod { modName = name, modFilename = file_name, modDownloadUrl = download_url, modDependencies = Nothing}
 
 
 fetchMod :: Mod a -> RIO App FilePath
-fetchMod Mod {filename, downloadUrl} = do
+fetchMod Mod {modFilename, modDownloadUrl} = do
   cacheDir <- asks appCacheDir
   token <- asks appFactorioToken
   username <- asks appFactorioUsername
-  let modFile = cacheDir </> filename
+  let modFile = cacheDir </> modFilename
   whenM (not <$> doesFileExist modFile) $ do
-    logInfo ("Downloading " <> displayShow (filename))
+    logInfo ("Downloading " <> displayShow (modFilename))
     req <- parseUrlThrow "https://mods.factorio.com"
     -- XXX file in memory
     response <- httpBS
-      $ setRequestPath (encodeUtf8 downloadUrl)
+      $ setRequestPath (encodeUtf8 modDownloadUrl)
       $ setRequestQueryString [("username", Just username), ("token", Just token)]
       $ req
     writeFileBinary modFile (getResponseBody response)

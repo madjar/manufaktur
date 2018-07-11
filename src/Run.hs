@@ -37,7 +37,7 @@ run = do
             mod_ <- resolveDeps mods modpackDef
             let modpackContent= toList (foldMap flattenDeps mod_)
 
-            logInfo ("All modpackContent: " <> displayShow (map name modpackContent))
+            logInfo ("All modpackContent: " <> displayShow (map modName modpackContent))
 
             writeFileBinary lockFile (BL.toStrict $ encodePretty modpackContent)
             return modpackContent

@@ -26,8 +26,10 @@ dependencies:
 - http-conduit
 - aeson
 - aeson-pretty
+- aeson-yak
 - data-fix
 - microlens-ghc
+- microlens-th
 
 ghc-options:
 - -Wall
