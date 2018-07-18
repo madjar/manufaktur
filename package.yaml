@@ -30,6 +30,7 @@ dependencies:
 - data-fix
 - microlens-ghc
 - microlens-th
+- regex-applicative-text
 
 ghc-options:
 - -Wall

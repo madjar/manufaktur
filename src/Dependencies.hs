@@ -28,22 +28,21 @@ import Codec.Archive.Zip
 import Lens.Micro.TH
 import Data.Aeson.TH
 import Data.Aeson.Yak
+import qualified Text.Regex.Applicative.Text as Regex
 
 data Dependency = Dependency
-  { dependencyName :: Text
-  , dependencyOption :: Bool
-  , dependencyContraint :: Text
+  { dependencyOption :: Bool
+  , dependencyName :: Text
+  , dependencyContraint :: Maybe Text
   } deriving (Show)
 makeFields ''Dependency
 
 instance FromJSON Dependency where
-  parseJSON = withText "dependency" $ \s -> do
-    let (opt, s') = case Text.stripPrefix "? " s of
-          Just x -> (True, x)
-          Nothing -> (False, s)
-        (n, c) = Text.break (== ' ') s'
-    -- TODO actual parsing of constraints (use an actual parsing library? Or at least regexes?)
-    return (Dependency n opt c)
+  parseJSON = withText "dependency" $ \s -> maybe (fail ("Could not parse " <> show s)) pure (Regex.match regex s)
+      where regex = Dependency <$> optionR <*> nameR <*> constraintR
+            optionR = isJust <$> optional (Regex.string "? ")
+            nameR = Text.pack <$> some (Regex.psym (/= ' '))
+            constraintR = optional $ Text.pack <$ Regex.string " >= " <*> some Regex.anySym
 
 
 data ModInfo = ModInfo {modInfoName :: Text, modInfoVersion :: Text, modInfoFactorioVersion :: Text, modInfoDependencies :: Yak Dependency} deriving (Show)
