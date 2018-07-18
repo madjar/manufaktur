@@ -13,6 +13,7 @@ module Dependencies
   ) where
 
 import Import
+import Util
 import ModPortal
 
 import qualified RIO.Set as Set
@@ -74,7 +75,11 @@ lookupDependencies mod_ = do
 
 resolveDeps :: Map Text (Mod Text) -> [Text] -> RIO App [Fix Mod]
 resolveDeps mods names = do
-  go <- caching (\n -> lookupDependencies (mods Map.! n))
+  go <- caching $ \depName ->
+    case Map.lookup depName mods of
+      Just dep -> lookupDependencies dep
+      Nothing -> reportError ("Could not find mod " <> depName)
+
   traverse (anaM go) names
 
 flattenDeps :: Fix Mod -> Set (Mod ())
