@@ -23,9 +23,6 @@ main = do
                  <> short 'v'
                  <> help "Verbose output?"
                   )
-       <*> strArgument ( metavar "MODLIST"
-                      <> help "A text file containing a list of mods"
-                       )
     )
     empty
   let cacheDir = "cache"

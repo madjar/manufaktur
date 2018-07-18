@@ -6,6 +6,7 @@ import Import
 import Util
 import ModPortal
 import Dependencies
+import Manifest
 
 import RIO.Directory
 import RIO.FilePath
@@ -14,27 +15,25 @@ import qualified RIO.ByteString.Lazy as BL
 
 import Codec.Archive.Zip
 import Data.Aeson.Encode.Pretty
+import Lens.Micro.GHC
 
 run :: RIO App ()
 run = do
-  modList <- asks (optionsModList . appOptions)
-  let lockFile = modList -<.> "lock.json"
+  manifest <- readManifest "Manufaktur.toml"
+  let lockFile = "Manufaktur.lock"
+      outputFile = (manifest ^. name . to Text.unpack) <> "_" <> (manifest ^. version . to Text.unpack) <.> "zip"
   lockFileExists <- doesFileExist lockFile
   modpackContent <- if lockFileExists
     then do logInfo (displayShow lockFile <> " exists, reading mods versions from it")
             readJSON lockFile
     else do logInfo (displayShow lockFile <> " does not exist, creating it")
 
-            modpackDef <-
-              filter (\t -> Text.index t 0 /= '#')
-              . filter (not . Text.null)
-              . Text.split (== '\n')
-              <$> readFileUtf8 modList
+            let modList = manifest ^.. dependencies . traverse . _1
 
-            logDebug ("Mod list: " <> displayShow modpackDef)
+            logDebug ("Mod list: " <> displayShow modList)
 
             mods <- getMods
-            mod_ <- resolveDeps mods modpackDef
+            mod_ <- resolveDeps mods modList
             let modpackContent= toList (foldMap flattenDeps mod_)
 
             logInfo ("All modpackContent: " <> displayShow (map modName modpackContent))
@@ -42,7 +41,7 @@ run = do
             writeFileBinary lockFile (BL.toStrict $ encodePretty modpackContent)
             return modpackContent
 
-  writeModPack (modList -<.> "zip") modpackContent
+  writeModPack outputFile modpackContent
 
 writeModPack :: FilePath -> [Mod a] -> RIO App ()
 writeModPack output mods = do

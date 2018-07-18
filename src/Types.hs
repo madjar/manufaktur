@@ -1,3 +1,6 @@
+{-# LANGUAGE FunctionalDependencies #-}
+{-# LANGUAGE MultiParamTypeClasses #-}
+{-# LANGUAGE FlexibleInstances #-}
 {-# LANGUAGE NoImplicitPrelude #-}
 {-# LANGUAGE DeriveTraversable #-}
 {-# LANGUAGE DeriveFunctor #-}
@@ -9,12 +12,12 @@ import RIO.Process
 
 import Data.Aeson (camelTo2)
 import Data.Aeson.TH (fieldLabelModifier, deriveJSON, defaultOptions)
+import Lens.Micro.TH
 
 
 -- | Command line arguments
 data Options = Options
   { optionsVerbose :: !Bool
-  , optionsModList :: !FilePath
   }
 
 data App = App
@@ -41,3 +44,10 @@ data Mod r = Mod
   } deriving (Show, Functor, Foldable, Traversable, Eq, Ord)
 
 deriveJSON defaultOptions { fieldLabelModifier = camelTo2 '_' . drop 3} '' Mod
+
+data Manifest = Manifest
+  { manifestName :: Text
+  , manifestVersion :: Text
+  , manifestDependencies :: [(Text, Maybe Text)]
+  } deriving (Show)
+makeFields ''Manifest
