@@ -3,7 +3,6 @@
 module Run (run) where
 
 import Import
-import Util
 import ModPortal
 import Dependencies
 import Manifest

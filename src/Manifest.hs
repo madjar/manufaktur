@@ -4,7 +4,6 @@
 module Manifest (readManifest) where
 
 import Import
-import Util
 
 import qualified RIO.HashMap as HM
 

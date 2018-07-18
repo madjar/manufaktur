@@ -15,22 +15,16 @@ module ModPortal
   ) where
 
 import Import
-import Util
 
 import RIO.Directory
 import RIO.FilePath
 import qualified RIO.ByteString.Lazy as BL
 import qualified RIO.Map.Unchecked as Map
-import qualified RIO.Text as Text
 
 import Data.Aeson
 import Data.Aeson.Types (Parser, parseEither)
 import Network.HTTP.Simple
 import Network.HTTP.Conduit (parseUrlThrow)
-import Lens.Micro.TH
-import Data.Aeson.TH
-import Data.Aeson.Yak
-import qualified Text.Regex.Applicative.Text as Regex
 import Codec.Archive.Zip
 
 getMods :: RIO App (Map Text (Mod Text))
@@ -76,30 +70,6 @@ fetchMod Mod {modFilename, modDownloadUrl} = do
     writeFileBinary modFile (getResponseBody response)
   return modFile
 
-
-data Dependency = Dependency
-  { dependencyOption :: Bool
-  , dependencyName :: Text
-  , dependencyConstraint :: Maybe Text
-  } deriving (Show)
-makeFields ''Dependency
-
-instance FromJSON Dependency where
-  parseJSON = withText "dependency" $ \s -> maybe (fail ("Could not parse " <> show s)) pure (Regex.match regex s)
-      where regex = Dependency <$> optionR <*> nameR <*> constraintR
-            optionR = isJust <$> optional (Regex.string "? ")
-            nameR = Text.pack <$> some (Regex.psym (/= ' '))
-            constraintR = optional $ Text.pack <$ Regex.string " >= " <*> some Regex.anySym
-
-
-data ModInfo = ModInfo
-  { modInfoName :: Text
-  , modInfoVersion :: Text
-  , modInfoFactorioVersion :: Text
-  , modInfoDependencies :: Yak Dependency
-  } deriving (Show)
-makeFields ''ModInfo
-deriveFromJSON defaultOptions { fieldLabelModifier = camelTo2 '_' . drop (Text.length "modInfo")} '' ModInfo
 
 getModInfo :: Mod a -> RIO App ModInfo
 getModInfo mod_ = do
