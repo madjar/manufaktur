@@ -64,7 +64,7 @@ lookupDependencies mod_ = do
   let toName = map (view name)
       sortedDeps =
         (toName *** toName) .
-        List.partition (view option) .
+        List.partition (not . view option) .
         filter ((/= "base") . view name) . shave . view dependencies $
         modInfo
   logDebug
