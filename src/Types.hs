@@ -33,10 +33,15 @@ instance HasLogFunc App where
 instance HasProcessContext App where
   processContextL = lens appProcessContext (\x y -> x { appProcessContext = y })
 
+data VersionConstraint
+  = Any
+  | Equals Text
+  | GreaterThan Text
+  deriving (Show)
 
 data Manifest = Manifest
   { manifestName :: Text
   , manifestVersion :: Text
-  , manifestDependencies :: [(Text, Maybe Text)]
+  , manifestDependencies :: [(Text, VersionConstraint)]
   } deriving (Show)
 makeFields ''Manifest

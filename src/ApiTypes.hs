@@ -45,7 +45,7 @@ deriveJSON defaultOptions { fieldLabelModifier = camelTo2 '_' . drop 3} ''Mod
 data Dependency = Dependency
   { dependencyOption :: Bool
   , dependencyName :: Text
-  , dependencyConstraint :: Maybe Text
+  , dependencyConstraint :: VersionConstraint
   } deriving (Show)
 makeFields ''Dependency
 
@@ -54,7 +54,7 @@ instance FromJSON Dependency where
       where regex = Dependency <$> optionR <*> nameR <*> constraintR
             optionR = isJust <$> optional (Regex.string "? ")
             nameR = Text.pack <$> some (Regex.psym (/= ' '))
-            constraintR = optional $ Text.pack <$ Regex.string " >= " <*> some Regex.anySym
+            constraintR = GreaterThan . Text.pack <$ Regex.string " >= " <*> some Regex.anySym <|> pure Any
 
 
 data ModInfo = ModInfo
