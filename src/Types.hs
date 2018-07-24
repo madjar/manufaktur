@@ -10,8 +10,6 @@ module Types where
 import RIO
 import RIO.Process
 
-import Data.Aeson (camelTo2)
-import Data.Aeson.TH (fieldLabelModifier, deriveJSON, defaultOptions)
 import Lens.Micro.TH
 
 
@@ -35,15 +33,6 @@ instance HasLogFunc App where
 instance HasProcessContext App where
   processContextL = lens appProcessContext (\x y -> x { appProcessContext = y })
 
-
-data Mod r = Mod
-  { modName :: Text
-  , modFilename :: FilePath
-  , modDownloadUrl :: Text
-  , modDependencies :: Maybe ([r], [r])
-  } deriving (Show, Functor, Foldable, Traversable, Eq, Ord)
-
-deriveJSON defaultOptions { fieldLabelModifier = camelTo2 '_' . drop 3} '' Mod
 
 data Manifest = Manifest
   { manifestName :: Text

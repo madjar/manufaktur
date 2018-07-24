@@ -27,7 +27,6 @@ dependencies:
 - aeson
 - aeson-pretty
 - aeson-yak
-- data-fix
 - microlens-ghc
 - microlens-th
 - regex-applicative-text

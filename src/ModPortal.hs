@@ -8,7 +8,7 @@
 {-# LANGUAGE OverloadedStrings #-}
 module ModPortal
   ( getMods
-  , fetchMod
+  , fetchRelease
   , Dependency(..), name, option, constraint
   , ModInfo (..), version, dependencies
   , getModInfo
@@ -27,7 +27,7 @@ import Network.HTTP.Simple
 import Network.HTTP.Conduit (parseUrlThrow)
 import Codec.Archive.Zip
 
-getMods :: RIO App (Map Text (Mod Text))
+getMods :: RIO App (Map Text Mod)
 getMods = do
   cacheDir <- asks appCacheDir
   let modsFile = cacheDir </> "mods.json"
@@ -42,40 +42,34 @@ getMods = do
       return mods
   return . Map.fromDistinctAscList . map (modName &&& id ) $ mods
 
-modsResponseParser :: Object -> Parser [Mod Text]
+modsResponseParser :: Object -> Parser [Mod]
 modsResponseParser root = do
-  results <- root .: "results"
-  forM results $ \obj -> do
-    name <- obj .: "name"
-    latest_release <- obj .: "latest_release"
-    file_name <- latest_release .: "file_name"
-    download_url <- latest_release .: "download_url"
-    return Mod { modName = name, modFilename = file_name, modDownloadUrl = download_url, modDependencies = Nothing}
+  root .: "results"
 
 
-fetchMod :: Mod a -> RIO App FilePath
-fetchMod Mod {modFilename, modDownloadUrl} = do
+fetchRelease :: Release -> RIO App FilePath
+fetchRelease r = do
   cacheDir <- asks appCacheDir
   token <- asks appFactorioToken
   username <- asks appFactorioUsername
-  let modFile = cacheDir </> modFilename
+  let modFile = cacheDir </> view fileName r
   whenM (not <$> doesFileExist modFile) $ do
-    logInfo ("Downloading " <> displayShow (modFilename))
+    logInfo ("Downloading " <> displayShow (view fileName r))
     req <- parseUrlThrow "https://mods.factorio.com"
     -- XXX file in memory
     response <- httpBS
-      $ setRequestPath (encodeUtf8 modDownloadUrl)
+      $ setRequestPath (r ^. downloadUrl . to encodeUtf8)
       $ setRequestQueryString [("username", Just username), ("token", Just token)]
       $ req
     writeFileBinary modFile (getResponseBody response)
   return modFile
 
 
-getModInfo :: Mod a -> RIO App ModInfo
-getModInfo mod_ = do
-  modFile <- fetchMod mod_
+getModInfo :: Release -> RIO App ModInfo
+getModInfo r = do
+  modFile <- fetchRelease r
   infoEntry <- withArchive modFile $ do
-    s <- mkEntrySelector (dropExtension (modFilename mod_) </> "info.json")
+    s <- mkEntrySelector (dropExtension (view fileName r) </> "info.json")
     getEntry s
 
   either fail return (eitherDecodeStrict infoEntry)

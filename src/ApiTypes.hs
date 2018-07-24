@@ -19,6 +19,29 @@ import Data.Aeson.TH
 import Data.Aeson
 import Data.Aeson.Yak
 
+-- * mods.factorio.com api
+
+data Release = Release
+  { releaseVersion :: Text
+  , releaseFileName :: FilePath
+  , releaseDownloadUrl :: Text
+  , releaseSha1 :: Text
+  } deriving Show
+
+makeFields ''Release
+deriveJSON defaultOptions { fieldLabelModifier = camelTo2 '_' . drop 7} ''Release
+
+data Mod = Mod
+  { modName :: Text
+  , modLatestRelease :: Release
+  } deriving (Show)
+
+makeFields ''Mod
+deriveJSON defaultOptions { fieldLabelModifier = camelTo2 '_' . drop 3} ''Mod
+
+
+-- * Types for modinfo.json, found inside a mod zip file
+
 data Dependency = Dependency
   { dependencyOption :: Bool
   , dependencyName :: Text
