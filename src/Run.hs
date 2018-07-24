@@ -15,7 +15,6 @@ import qualified RIO.Map as Map
 
 import Codec.Archive.Zip
 import Data.Aeson.Encode.Pretty
-import Lens.Micro.GHC
 
 run :: RIO App ()
 run = do
@@ -28,7 +27,7 @@ run = do
             readJSON lockFile
     else do logInfo (displayShow lockFile <> " does not exist, creating it")
 
-            let modList = manifest ^.. dependencies . traverse . _1
+            let modList = manifest ^. dependencies
 
             logDebug ("Mod list: " <> displayShow modList)
 
