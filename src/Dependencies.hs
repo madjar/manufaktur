@@ -32,9 +32,10 @@ resolveDeps' modDB lockFile ((currentModName, currentConstraint):rest) resolved 
       logWarn ("Unknown mod " <> displayShow currentModName <> ", skipping.")
       resolveDeps' modDB lockFile rest resolved
     Just currentMod -> do
-      let chosenRelease = case Map.lookup currentModName lockFile of
-            Nothing -> currentMod ^. latestRelease
-            Just r -> r
+      let chosenRelease =
+            case Map.lookup currentModName lockFile of
+              Nothing -> currentMod ^. latestRelease
+              Just r -> r
           chosenVersion = chosenRelease ^. version
       case currentConstraint of
         Any -> return ()
@@ -69,11 +70,14 @@ resolveDeps' modDB lockFile ((currentModName, currentConstraint):rest) resolved 
             filter
               (\d -> view name d `Map.notMember` resolved)
               dependenciesNames
-                    --TODO dedup
+          dependenciesToConsider =
+            filter
+              (\d -> view name d `notElem` map fst rest) -- XXX this is ugly and slow
+              unresolvedDependencies
       resolveDeps'
         modDB
         lockFile
-        (rest ++ map depAsTuple unresolvedDependencies)
+        (rest ++ map depAsTuple dependenciesToConsider)
         (Map.insert (currentMod ^. name) (currentMod ^. latestRelease) resolved)
 
 depAsTuple :: (HasName s a, HasConstraint s b) => s -> (a, b)
