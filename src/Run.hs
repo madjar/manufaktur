@@ -36,6 +36,10 @@ run = do
 
   logInfo ("All modpackContent: " <> displayShow (Map.keys modpackContent))
 
+  lockedMode <- view (options . locked)
+  when (lockedMode && modpackContent /= currentLockFile)
+       (reportError "Lockfile changed and --locked was passed, crashing")
+
   writeFileBinary lockFile (BL.toStrict $ encodePretty modpackContent)
 
   writeModPack outputFile (Map.elems modpackContent)

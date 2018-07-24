@@ -16,7 +16,10 @@ import Lens.Micro.TH
 -- | Command line arguments
 data Options = Options
   { optionsVerbose :: !Bool
+  , optionsLocked :: !Bool
   }
+
+makeFields ''Options
 
 data App = App
   { appLogFunc :: !LogFunc
@@ -32,6 +35,11 @@ instance HasLogFunc App where
   logFuncL = lens appLogFunc (\x y -> x { appLogFunc = y })
 instance HasProcessContext App where
   processContextL = lens appProcessContext (\x y -> x { appProcessContext = y })
+
+options :: Lens' App Options
+options = lens appOptions undefined
+
+
 
 data VersionConstraint
   = Any

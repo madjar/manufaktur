@@ -23,6 +23,9 @@ main = do
                  <> short 'v'
                  <> help "Verbose output?"
                   )
+       <*> switch ( long "locked"
+                 <> help "Require Manufaktur.lock to be up-to-date"
+                  )
     )
     empty
   let cacheDir = "cache"

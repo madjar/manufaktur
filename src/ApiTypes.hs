@@ -26,7 +26,7 @@ data Release = Release
   , releaseFileName :: FilePath
   , releaseDownloadUrl :: Text
   , releaseSha1 :: Text
-  } deriving Show
+  } deriving (Show, Eq)
 
 makeFields ''Release
 deriveJSON defaultOptions { fieldLabelModifier = camelTo2 '_' . drop 7} ''Release
