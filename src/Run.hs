@@ -22,22 +22,21 @@ run = do
   let lockFile = "Manufaktur.lock"
       outputFile = (manifest ^. name . to Text.unpack) <> "_" <> (manifest ^. version . to Text.unpack) <.> "zip"
   lockFileExists <- doesFileExist lockFile
-  modpackContent <- if lockFileExists
+  currentLockFile <- if lockFileExists
     then do logInfo (displayShow lockFile <> " exists, reading mods versions from it")
             readJSON lockFile
-    else do logInfo (displayShow lockFile <> " does not exist, creating it")
+    else return mempty
 
-            let modList = manifest ^. dependencies
+  let modList = manifest ^. dependencies
 
-            logDebug ("Mod list: " <> displayShow modList)
+  logDebug ("Mod list: " <> displayShow modList)
 
-            mods <- getMods
-            modpackContent <- resolveDeps mods modList
+  mods <- getMods
+  modpackContent <- resolveDeps mods currentLockFile modList
 
-            logInfo ("All modpackContent: " <> displayShow (Map.keys modpackContent))
+  logInfo ("All modpackContent: " <> displayShow (Map.keys modpackContent))
 
-            writeFileBinary lockFile (BL.toStrict $ encodePretty modpackContent)
-            return modpackContent
+  writeFileBinary lockFile (BL.toStrict $ encodePretty modpackContent)
 
   writeModPack outputFile (Map.elems modpackContent)
 

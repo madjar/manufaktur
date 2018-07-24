@@ -21,40 +21,46 @@ versionIsGreaterThan x y = parse x >= parse y
   where parse :: Text -> [Maybe Int]
         parse = map (readMaybe . Text.unpack) . Text.split (== '.')
 
-resolveDeps :: Map Text Mod -> [(Text, VersionConstraint)] -> RIO App (Map Text Release)
-resolveDeps modDB  mods = resolveDeps' modDB mods mempty
+resolveDeps :: Map Text Mod -> Map Text Release -> [(Text, VersionConstraint)] -> RIO App (Map Text Release)
+resolveDeps modDB lockFile mods = resolveDeps' modDB lockFile mods mempty
 
-resolveDeps' :: Map Text Mod -> [(Text, VersionConstraint)] -> Map Text Release -> RIO App (Map Text Release)
-resolveDeps' _ [] resolved = return resolved
-resolveDeps' modDB ((currentModName, currentConstraint):rest) resolved =
+resolveDeps' :: Map Text Mod -> Map Text Release -> [(Text, VersionConstraint)] -> Map Text Release -> RIO App (Map Text Release)
+resolveDeps' _ _ [] resolved = return resolved
+resolveDeps' modDB lockFile ((currentModName, currentConstraint):rest) resolved =
   case Map.lookup currentModName modDB of
     Nothing -> do
       logWarn ("Unknown mod " <> displayShow currentModName <> ", skipping.")
-      resolveDeps' modDB rest resolved
+      resolveDeps' modDB lockFile rest resolved
     Just currentMod -> do
+      let chosenRelease = case Map.lookup currentModName lockFile of
+            Nothing -> currentMod ^. latestRelease
+            Just r -> r
+          chosenVersion = chosenRelease ^. version
       case currentConstraint of
         Any -> return ()
         Equals v ->
           when
-            (v /= currentMod ^. latestRelease . version)
+            (v /= chosenVersion)
             (reportError
                ("Problem with the requirement for mod " <> show currentModName <>
                 ": version " <>
                 show v <>
                 " is required, but the algo is silly and will only use the last version (" <>
-                show (currentMod ^. latestRelease . version) <>
+                show chosenVersion <>
                 ")"))
         GreaterThan v ->
           when
-            (not $ (currentMod ^. latestRelease . version) `versionIsGreaterThan` v)
+            (not $ chosenVersion `versionIsGreaterThan` v)
             (reportError
                ("Problem with the requirement for mod " <> show currentModName <>
                 ": version " <>
                 show v <>
                 " or greater is required, but the last version is " <>
-                show (currentMod ^. latestRelease . version)))
-      logDebug ("Resolving dependencies for " <> displayShow currentModName)
-      modInfo <- getModInfo (currentMod ^. latestRelease)
+                show chosenVersion))
+      logDebug
+        ("Resolving " <> displayShow currentModName <> " to " <>
+         displayShow chosenVersion)
+      modInfo <- getModInfo chosenRelease
       let dependenciesNames =
             modInfo ^.. dependencies . to shave . traverse .
             filtered (not . view option) .
@@ -66,6 +72,7 @@ resolveDeps' modDB ((currentModName, currentConstraint):rest) resolved =
                     --TODO dedup
       resolveDeps'
         modDB
+        lockFile
         (rest ++ map depAsTuple unresolvedDependencies)
         (Map.insert (currentMod ^. name) (currentMod ^. latestRelease) resolved)
 
